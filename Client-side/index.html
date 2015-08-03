@@ -8,10 +8,41 @@
 <div class="title">WebSocket Chat</div>
 <div class="description">Basic websocket chat for the purposes of creating a client->server->client communication with golang and websocket</div>
 
-<div id="chat-window"></div>
+<div id="chat-window">
+</div>
 
 <textarea id="chat-input"></textarea>
-<!-- <div id="send-button">Send</div> -->
 
+<script type="text/javascript">
+	var inputBox = null;
+	var app;
+
+	function onEnter(event) {
+		if (event.keyCode == 13 && inputBox.value != "") {
+			var message = inputBox.value;
+			app.sendMessage(message);
+			event.preventDefault();
+		}
+	}
+
+	function clearOnEnter(event) {
+		if (event.keyCode == 13 && inputBox.value != "") {
+			inputBox.value = "";
+		}
+	}
+
+	function main(){
+		inputBox = document.getElementById("chat-input");
+		inputBox.onkeypress = onEnter;
+		inputBox.onkeyup = clearOnEnter;
+
+		var chatWindow = document.getElementById("chat-window");
+		app = new WebSocketChat("Sunmock", chatWindow);
+	}
+
+	window.onload = main;
+</script>
+
+<script type="text/javascript" src="WebSocketChat.js"></script>
 </body>
 </html>

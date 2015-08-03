@@ -28,6 +28,7 @@ body{
 	max-width: 600px;
 	height: 400px;
 	display:block;
+	overflow-y: scroll;
 }
 
 #chat-input{
@@ -40,4 +41,24 @@ body{
 	height: 55px;
 	display:block;
 	resize: none;
+}
+
+#message{
+	width: 95%;
+	margin: 5px;
+	float: left;
+}
+
+#username {
+	float:left;
+	font-style: italic;
+}
+
+#message-colon {
+	float:left;
+	margin: 0 5px;
+}
+
+#user-message {
+	float:left;
 }
