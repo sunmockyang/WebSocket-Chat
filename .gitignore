@@ -1,0 +1,4 @@
+
+Server-side/bin/
+Server-side/pkg/
+Server-side/src/github.com/gorilla/websocket/
