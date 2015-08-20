@@ -8,7 +8,7 @@ type ConnectionManager struct {
 	connections map[*connection]bool
 	register    chan *connection
 	deregister  chan *connection
-	broadcast   chan []byte
+	broadcast   chan *connection
 }
 
 func CreateConnectionManager() *ConnectionManager {
@@ -16,7 +16,7 @@ func CreateConnectionManager() *ConnectionManager {
 		connections: make(map[*connection]bool),
 		register:    make(chan *connection),
 		deregister:  make(chan *connection),
-		broadcast:   make(chan []byte),
+		broadcast:   make(chan *connection),
 	}
 }
 
@@ -28,7 +28,7 @@ func (this *ConnectionManager) StartListening() {
 		case c := <-this.deregister:
 			this.DeregisterConnection(c)
 		case c := <-this.broadcast:
-			this.BroadcastPacket(c)
+			this.BroadcastPacketButSender(c)
 		}
 	}
 }
@@ -50,15 +50,30 @@ func (this *ConnectionManager) DeregisterConnection(conn *connection) {
 	}
 }
 
-func (this *ConnectionManager) BroadcastPacket(message []byte) {
+func (this *ConnectionManager) BroadcastPacket(c *connection) {
 	fmt.Printf("Broadcasting to: %d clients\n", (len(this.connections)))
-	fmt.Printf("Received message: %s\n", message)
+	fmt.Printf("Received message: %s\n", c.buffer)
 
 	for conn := range this.connections {
 		select {
-		case conn.send <- message:
+		case conn.send <- c.buffer:
 		default:
 			this.deregister <- conn
+		}
+	}
+}
+
+func (this *ConnectionManager) BroadcastPacketButSender(c *connection) {
+	fmt.Printf("Broadcasting to: %d clients\n", (len(this.connections) - 1))
+	fmt.Printf("Received message: %s\n", c.buffer)
+
+	for conn := range this.connections {
+		if conn != c {
+			select {
+			case conn.send <- c.buffer:
+			default:
+				this.deregister <- conn
+			}
 		}
 	}
 }

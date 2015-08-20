@@ -31,6 +31,7 @@ var upgrader = websocket.Upgrader{
 type connection struct {
 	socket  *websocket.Conn
 	manager *ConnectionManager
+	buffer  []byte
 	send    chan []byte
 }
 
@@ -38,6 +39,7 @@ func CreateConnection(conn *websocket.Conn, connManager *ConnectionManager) *con
 	c := connection{
 		socket:  conn,
 		manager: connManager,
+		buffer:  nil,
 		send:    make(chan []byte),
 	}
 
@@ -59,7 +61,9 @@ func (this *connection) Listen() {
 			break
 		}
 
-		this.manager.broadcast <- message
+		this.buffer = message
+
+		this.manager.broadcast <- this
 	}
 }
 
