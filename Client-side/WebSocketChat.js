@@ -3,7 +3,7 @@ function WebSocketChat(username, chatWindow, url) {
 	this.username = username;
 	this.chatWindow = chatWindow;
 	this.url = url;
-	
+
 	if (username == null || username == ""){
 		this.displayMessage("CLIENT", "YOU NEED A USERNAME. REFRESH THE PAGE.");
 		return;
@@ -16,6 +16,29 @@ function WebSocketChat(username, chatWindow, url) {
 	this.websocket.onopen = this.onOpen.bind(this);
 	this.websocket.onclose = this.onClose.bind(this);
 }
+
+WebSocketChat.prototype.generateMessageTemplate = function(username, message) {
+	var elem = document.createElement("div");
+	elem.className = "message";
+
+	var usernameElem = document.createElement("div");
+	usernameElem.className = "username";
+	usernameElem.innerHTML = username;
+	
+	var colonElem = document.createElement("div");
+	colonElem.className = "message-colon";
+	colonElem.innerHTML = ":";
+	
+	var messageElem = document.createElement("div");
+	messageElem.className = "user-message";
+	messageElem.innerHTML = message;
+
+	elem.appendChild(usernameElem);
+	elem.appendChild(colonElem);
+	elem.appendChild(messageElem);
+
+	return elem;
+};
 
 WebSocketChat.prototype.onOpen = function(event) {
 	this.displayMessage("SERVER", "Connection made.");
@@ -43,9 +66,6 @@ WebSocketChat.prototype.sendMessage = function(message) {
 };
 
 WebSocketChat.prototype.displayMessage = function(username, message) {
-	var elem = '<div id="message"><div id="username">' + username + '</div><div id="message-colon">:</div><div id="user-message">' + message + '</div></div>'
-
-	this.chatWindow.innerHTML += elem;
-
+	this.chatWindow.appendChild(this.generateMessageTemplate(username, message));
 	this.chatWindow.scrollTop = this.chatWindow.scrollHeight;
 };

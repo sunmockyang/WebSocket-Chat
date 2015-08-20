@@ -43,22 +43,22 @@ body{
 	resize: none;
 }
 
-#message{
+.message{
 	width: 95%;
 	margin: 5px;
 	float: left;
 }
 
-#username {
+.username {
 	float:left;
 	font-style: italic;
 }
 
-#message-colon {
+.message-colon {
 	float:left;
 	margin: 0 5px;
 }
 
-#user-message {
+.user-message {
 	float:left;
 }
