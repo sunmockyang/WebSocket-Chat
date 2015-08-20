@@ -32,13 +32,17 @@
 	}
 
 	function main(){
+		var name = prompt("Please enter your username", names[Math.floor(Math.random() * names.length)]);
+
 		inputBox = document.getElementById("chat-input");
 		inputBox.onkeypress = onEnter;
 		inputBox.onkeyup = clearOnEnter;
 
 		var chatWindow = document.getElementById("chat-window");
-		app = new WebSocketChat("Sunmock", chatWindow);
+		app = new WebSocketChat(name, chatWindow, "ws://localhost:8080/ws");
 	}
+
+	var names = ["Arry", "Harry", "Boop", "Beep", "Mingebag", "Hee", "Sun", "Pris", "Em", "Lee", "Steens", "Russ", "Sam", "Kyle", "Courtney", "Fat", "Meat", "Mr.Bones"];
 
 	window.onload = main;
 </script>
