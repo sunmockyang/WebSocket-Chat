@@ -23,6 +23,7 @@ WebSocketChat.prototype.generateMessageTemplate = function(username, message) {
 
 	var usernameElem = document.createElement("div");
 	usernameElem.className = "username";
+	usernameElem.style.color = generateRandomColourFromString(username);
 	usernameElem.innerHTML = username;
 	
 	var colonElem = document.createElement("div");
@@ -69,3 +70,16 @@ WebSocketChat.prototype.displayMessage = function(username, message) {
 	this.chatWindow.appendChild(this.generateMessageTemplate(username, message));
 	this.chatWindow.scrollTop = this.chatWindow.scrollHeight;
 };
+
+function generateRandomColourFromString(str) {
+	var len = str.length;
+	var num = 1;
+
+	for (var i = 0; i < len; i++) {
+		num *= str.charCodeAt(i);
+	};
+
+	num %= 16777215;
+
+	return "#" + num.toString(16);
+}
